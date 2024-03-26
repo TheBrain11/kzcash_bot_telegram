@@ -1,0 +1,14 @@
+[Unit]
+Description=MY BOT FOR LAB 4
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/nurseyit/mybot
+ExecStart=/home/nurseyit/mybot/kzc_bot.py
+KillMode=process
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

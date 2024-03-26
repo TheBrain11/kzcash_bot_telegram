@@ -1,0 +1,37 @@
+import config
+import telebot
+from bitcoinrpc.authproxy import AuthServiceProxy
+
+bot = telebot.TeleBot(config.token)
+rpc_connection = AuthServiceProxy("http://%s:%s@%s:%s" % (config.rpc_user, config.rpc_password, config.rpc_host, config.rpc_port))
+
+@bot.message_handler(commands=['getnewaddress'])
+def get_new_address(message):
+    new_address = rpc_connection.getnewaddress()
+    bot.send_message(message.chat.id, f"New address generated: {new_address}")
+
+@bot.message_handler(commands=['getbalance'])
+def get_balance(message):
+    balance = rpc_connection.getbalance()
+    bot.send_message(message.chat.id, f"Current balance: {balance} BTC")
+
+@bot.message_handler(content_types=["text"])
+def repeat_all_messages(message):
+    bot.send_message(message.chat.id, "Unknown command. Available commands: /getnewaddress, /getbalance")
+
+if __name__ == '__main__':
+    bot.infinity_polling()
+#!venv/bin/python
+import config
+import telebot
+
+bot = telebot.TeleBot(config.token)
+
+@bot.message_handler(content_types=["text"])
+def repeat_all_messages(message): # Название функции не играет никакой роли
+    bot.send_message(message.chat.id, message.text)
+
+if __name__ == '__main__':
+    bot.infinity_polling()
+
+
